@@ -290,7 +290,7 @@ void Game::cursorBlock(double xpos, double ypos, GLint windowWidth, GLint window
     // find y
     int y_block_size = (int) round(windowHeight / 20);
     int y_block_offset = (int) (ypos / y_block_size);
-    *y = player.render_y + (9 - y_block_offset);
+    
 
     //find x
     int x_block_size = (int) round(windowWidth / (20 / aspectRatio));
@@ -308,6 +308,15 @@ void Game::cursorBlock(double xpos, double ypos, GLint windowWidth, GLint window
     int x_mid = round((20 / aspectRatio) / 2); 
 
     *x = player.render_x + (x_block_offset - x_mid);
+    *y = player.render_y + (9 - y_block_offset);
+
+    //check distance from player
+    //if distance is graeter than 5 blocks
+    if(pow(player.x - *x, 2) + pow((player.y + 1) - *y, 2) > 25){
+        *x = -1;
+        *y = -1;
+    }
+
     
     return;
 
@@ -486,10 +495,6 @@ void Game::process_key(){
         }
         
     } 
-
-
-
-
 
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
         if(collisions(3, player.walk_speed)){
