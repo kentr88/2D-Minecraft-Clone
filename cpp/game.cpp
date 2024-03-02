@@ -261,6 +261,24 @@ void Game::renderPlayer(GLfloat aspectRatio, float player_x, float player_y){
     drawRectangle(x, y + 0.2f, x + (0.1f * aspectRatio), y, 238.0/256.0, 221.0/256.0, 181.0/256.0);
 }
 
+void Game::renderHotbar(GLfloat aspectRatio, GLfloat textures[7][4]){
+    int multiplyer = (int) (1.0f / (0.1 * aspectRatio));
+    GLfloat x = -1.0f + (0.1 * aspectRatio) * (multiplyer - 4);
+    GLfloat y = (-9) * 0.1;
+    
+    drawRectangle(x, y, x + (0.6 * aspectRatio), y - 0.1, 0, 0, 0);
+
+    
+    drawRectangle(x + ((0.1 * player.selectedBlock) * aspectRatio), y, x + ((0.1 + 0.1 * player.selectedBlock) * aspectRatio), y - 0.1, 1, 1, 1);
+    
+
+    for(int i = 1; i < 7; i++){
+        drawRectangle(x + ((0.015 + 0.1 * (i - 1)) * aspectRatio), y - 0.015, x + ((0.085 + 0.1 * (i - 1)) * aspectRatio), y - 0.085, textures[i][0], textures[i][1], textures[i][2]);
+    }
+    
+}
+
+
 void Game::cursorBlock(double xpos, double ypos, GLint windowWidth, GLint windowHeight, GLfloat aspectRatio, int * x, int * y){
     //make sure cursor is within the window
     if(xpos < 0 || xpos > windowWidth || ypos < 0 || ypos > windowHeight){
@@ -356,7 +374,7 @@ void Game::processJump(){
         //complete jump in 10 frames
         //will jump approx 1.25 blocks
         
-        if(player.jumping_frames < 15){
+        if(player.jumping_frames < 10){
             //check if can jump
             if(world[(int) floor(player.y + 2)][(int) floor(player.x)] == 0 && world[(int) floor(player.y + 2)][(int) ceil(player.x)] == 0){
                 player.move_y(0.125);
@@ -495,15 +513,24 @@ void Game::process_key(){
 void Game::process_mouse(){
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
         //add block
-        world[player.selectedY][player.selectedX] = 1;
+        world[player.selectedY][player.selectedX] = player.selectedBlock + 1;
     }
 
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
         //delete block
         world[player.selectedY][player.selectedX] = 0;
     }
+
 }
 
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
+    Player * player = static_cast<Player*>(glfwGetWindowUserPointer(window));
+
+    player->selectedBlock -= (int) yoffset;
+    if(player->selectedBlock < 0) player->selectedBlock = 5;
+    if(player->selectedBlock > 5) player->selectedBlock = 0;
+}
 
 
 Game::Game(int _width, int _height, const char * name, const char * icon_directory, int _world_height, int _world_length){
@@ -568,6 +595,11 @@ void Game::run(){
 
             process_mouse();
 
+            glfwSetWindowUserPointer(window, &player);
+            glfwSetScrollCallback(window, [](GLFWwindow* window, double xoffset, double yoffset){
+                scroll_callback(window, xoffset, yoffset);
+            });
+
             // Render here
             glClear(GL_COLOR_BUFFER_BIT);
 
@@ -577,6 +609,7 @@ void Game::run(){
             //draw squares on screen
             renderScreen(aspectRatio, world, textures, world_height, world_length);
             renderPlayer(aspectRatio, player.x, player.y);
+            renderHotbar(aspectRatio, textures);
 
 
             // Swap front and back buffers

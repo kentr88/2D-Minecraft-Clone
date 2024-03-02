@@ -25,7 +25,7 @@ private:
     int ** world;
 
     //create player
-    Player player = Player(250, 70, 256, 70, 0.25, 0.5);
+    Player player = Player(250, 70, 256, 70, 0.15, 0.3);
 
     //fps limiting
     const double fpsLimit = 1.0 / 60.0;
@@ -59,6 +59,8 @@ private:
 
     //draw player based on x,y player coords
     void renderPlayer(GLfloat aspectRatio, float player_x, float player_y);
+
+    void renderHotbar(GLfloat aspectRatio, GLfloat textures[7][4]);
     
 
     //find current block of cursor
