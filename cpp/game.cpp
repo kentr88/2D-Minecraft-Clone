@@ -508,6 +508,18 @@ void Game::process_key(){
             }
         }
     } 
+
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
+    }
+
+    if(glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) player.selectedBlock = 0;
+    if(glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) player.selectedBlock = 1;
+    if(glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) player.selectedBlock = 2;
+    if(glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) player.selectedBlock = 3;
+    if(glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) player.selectedBlock = 4;
+    if(glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) player.selectedBlock = 5;
+
 }
     
 void Game::process_mouse(){
