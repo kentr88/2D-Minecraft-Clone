@@ -529,13 +529,20 @@ void Game::process_key(){
     
 void Game::process_mouse(){
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS){
+        cout << "insert " << player.selectedX << " " << player.selectedY << endl;
+
         //add block
-        world[player.selectedY][player.selectedX] = player.selectedBlock + 1;
+        if(player.selectedX >= 0 && player.selectedY >= 0 && player.selectedX < world_length && player.selectedY < world_height){
+            world[player.selectedY][player.selectedX] = player.selectedBlock + 1;
+        }
     }
 
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
         //delete block
-        world[player.selectedY][player.selectedX] = 0;
+        cout << "delete " << player.selectedX << " " << player.selectedY << endl;
+        if(player.selectedX >= 0 && player.selectedY >= 0 && player.selectedX < world_length && player.selectedY < world_height){
+            world[player.selectedY][player.selectedX] = 0;
+        }
     }
 
 }

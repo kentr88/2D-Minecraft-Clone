@@ -15,7 +15,7 @@ SRCS = player.cpp game.cpp main.cpp
 # Build and run tests
 .PHONY: all
 all:
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SRCS) -lglfw3 -lkernel32 -lopengl32 -lglu32 -lglew32
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SRCS) -lglfw3 -lkernel32 -lopengl32 -lglu32 -lglew32 -I.
 	./$(TARGET)
 
 # Clean rule
